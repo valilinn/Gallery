@@ -17,7 +17,11 @@ class SplashViewController: UIViewController {
         animationView!.loopMode = .repeat(2)
         animationView!.animationSpeed = 0.5
         animationView!.play()
-        view.addSubview(animationView!)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 4) { [weak self] in
+            self?.animationView.pause()
+            self?.present(LoginViewController(), animated: false)
+        }
+       
     }
 
 
