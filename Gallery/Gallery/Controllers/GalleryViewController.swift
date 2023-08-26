@@ -9,9 +9,16 @@ import UIKit
 
 class GalleryViewController: UIViewController {
 
-    @IBOutlet weak var imageView: UIImageView!
+    @IBOutlet weak var collectionView: UICollectionView!
+    var images = [UIImage]()
+    //    @IBOutlet weak var imageView: UIImageView!
     override func viewDidLoad() {
         super.viewDidLoad()
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        
+        let photoNib = UINib(nibName: "CollectionViewCell", bundle: Bundle.main)
+        collectionView.register(photoNib, forCellWithReuseIdentifier: "photoCollectionViewCell")
 
     }
 
@@ -62,7 +69,8 @@ extension GalleryViewController: UIImagePickerControllerDelegate & UINavigationC
         guard let image = info[.originalImage] as? UIImage else {
             return
         }
-        self.imageView.image = image
+        self.images.append(image)
+        collectionView.reloadData()
         picker.dismiss(animated: true)
         
         
@@ -77,3 +85,24 @@ extension GalleryViewController: UIImagePickerControllerDelegate & UINavigationC
 //        picker.dismiss(animated: true)
     }
 }
+
+extension GalleryViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        1
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        images.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let index = indexPath.row
+        
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "photoCollectionViewCell", for: indexPath) as? CollectionViewCell else { return UICollectionViewCell() }
+        cell.imageCell.image = images[index]
+        return cell
+    }
+    
+    
+}
+

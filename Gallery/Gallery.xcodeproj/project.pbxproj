@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		EA3C0B092A9A4D7C00822C9A /* GalleryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA3C0B072A9A4D7C00822C9A /* GalleryViewController.swift */; };
 		EA3C0B0A2A9A4D7C00822C9A /* GalleryViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = EA3C0B082A9A4D7C00822C9A /* GalleryViewController.xib */; };
+		EA3C0B2D2A9AAF9400822C9A /* CollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA3C0B2B2A9AAF9400822C9A /* CollectionViewCell.swift */; };
+		EA3C0B2E2A9AAF9400822C9A /* CollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = EA3C0B2C2A9AAF9400822C9A /* CollectionViewCell.xib */; };
 		EA5636982A99363E00DDCD8B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA5636972A99363E00DDCD8B /* AppDelegate.swift */; };
 		EA56369A2A99363E00DDCD8B /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA5636992A99363E00DDCD8B /* SceneDelegate.swift */; };
 		EA56369C2A99363E00DDCD8B /* SplashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA56369B2A99363E00DDCD8B /* SplashViewController.swift */; };
@@ -24,6 +26,8 @@
 /* Begin PBXFileReference section */
 		EA3C0B072A9A4D7C00822C9A /* GalleryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalleryViewController.swift; sourceTree = "<group>"; };
 		EA3C0B082A9A4D7C00822C9A /* GalleryViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = GalleryViewController.xib; sourceTree = "<group>"; };
+		EA3C0B2B2A9AAF9400822C9A /* CollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewCell.swift; sourceTree = "<group>"; };
+		EA3C0B2C2A9AAF9400822C9A /* CollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CollectionViewCell.xib; sourceTree = "<group>"; };
 		EA5636942A99363E00DDCD8B /* Gallery.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Gallery.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EA5636972A99363E00DDCD8B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		EA5636992A99363E00DDCD8B /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -86,6 +90,7 @@
 				EA56369D2A99363E00DDCD8B /* Main.storyboard */,
 				EA5636B52A99412400DDCD8B /* LoginViewController.xib */,
 				EA3C0B082A9A4D7C00822C9A /* GalleryViewController.xib */,
+				EA3C0B2C2A9AAF9400822C9A /* CollectionViewCell.xib */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -105,6 +110,7 @@
 				EA56369B2A99363E00DDCD8B /* SplashViewController.swift */,
 				EA5636B42A99412400DDCD8B /* LoginViewController.swift */,
 				EA3C0B072A9A4D7C00822C9A /* GalleryViewController.swift */,
+				EA3C0B2B2A9AAF9400822C9A /* CollectionViewCell.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -181,6 +187,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				EA5636B72A99412400DDCD8B /* LoginViewController.xib in Resources */,
+				EA3C0B2E2A9AAF9400822C9A /* CollectionViewCell.xib in Resources */,
 				EA3C0B0A2A9A4D7C00822C9A /* GalleryViewController.xib in Resources */,
 				EA5636A42A99364000DDCD8B /* LaunchScreen.storyboard in Resources */,
 				EA5636A12A99364000DDCD8B /* Assets.xcassets in Resources */,
@@ -198,6 +205,7 @@
 			files = (
 				EA5636B62A99412400DDCD8B /* LoginViewController.swift in Sources */,
 				EA56369C2A99363E00DDCD8B /* SplashViewController.swift in Sources */,
+				EA3C0B2D2A9AAF9400822C9A /* CollectionViewCell.swift in Sources */,
 				EA3C0B092A9A4D7C00822C9A /* GalleryViewController.swift in Sources */,
 				EA5636982A99363E00DDCD8B /* AppDelegate.swift in Sources */,
 				EA56369A2A99363E00DDCD8B /* SceneDelegate.swift in Sources */,
