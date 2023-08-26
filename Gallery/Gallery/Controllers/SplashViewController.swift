@@ -19,7 +19,10 @@ class SplashViewController: UIViewController {
         animationView!.play()
         DispatchQueue.main.asyncAfter(deadline: .now() + 4) { [weak self] in
             self?.animationView.pause()
-            self?.present(LoginViewController(), animated: false)
+            
+            let destinationViewController = LoginViewController()
+            destinationViewController.modalPresentationStyle = .fullScreen
+            self?.present(destinationViewController, animated: false)
         }
        
     }
