@@ -15,11 +15,11 @@ class LoginViewController: UIViewController {
     @IBOutlet weak var passField: UILabel!
     let numImages = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"]
     
-    //〇〇〇〇
+    
     
     var enteredPass = "" {
         didSet {
-            passField.text = enteredPass
+            passField.text = getConfidentPassword()
             if enteredPass == requiredPass {
                 requiredPassAlert()
                 print("OK")
@@ -35,6 +35,12 @@ class LoginViewController: UIViewController {
         super.viewDidLoad()
         setupNumImages()
     }
+    override func viewWillAppear(_ animated: Bool) {
+       super.viewWillAppear(animated)
+        enteredPass = "Enter Password"
+        passField.text = enteredPass
+        
+    }
 
     @IBAction func enterNum(_ sender: UIButton) {
         if enteredPass == "Enter Password" {
@@ -46,11 +52,21 @@ class LoginViewController: UIViewController {
     }
     
     @IBAction func enterByFaceId(_ sender: Any) {
+        confirmPass()
     }
     
     @IBAction func deleteSymbol(_ sender: Any) {
         guard enteredPass.count > 0 else { return }
         enteredPass.removeLast()
+    }
+    
+    func getConfidentPassword() -> String {
+        guard enteredPass.count > 0 && enteredPass != "Enter Password" else { return "" }
+        var result = String(repeating: "〇", count: enteredPass.count)
+        result.removeLast()
+        let lastSymbol = String(enteredPass.last ?? "〇")
+        result.append(lastSymbol)
+        return result
     }
     
     func setupNumImages() {
@@ -65,7 +81,6 @@ class LoginViewController: UIViewController {
     private func wrongPassAlert() {
         let alertController = UIAlertController(title: "Sorry", message: "Wrong password", preferredStyle: .alert)
         let tryAgainAction = UIAlertAction(title: "Try again", style: .cancel) { action in
-            self.passField.text = "Enter Password"
             self.enteredPass = "Enter Password"
         }
         alertController.addAction(tryAgainAction)
@@ -75,9 +90,16 @@ class LoginViewController: UIViewController {
     private func requiredPassAlert() {
         let alertController = UIAlertController(title: "Success 🎉", message: "", preferredStyle: .alert)
         present(alertController, animated: true)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2) { 
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
             alertController.dismiss(animated: true)
+            self.confirmPass()
         }
        
+    }
+    
+    func confirmPass() {
+        let destinationController = GalleryViewController()
+        destinationController.modalPresentationStyle = .fullScreen
+        self.present(destinationController, animated: false)
     }
 }
