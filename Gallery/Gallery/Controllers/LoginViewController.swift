@@ -6,9 +6,10 @@
 //
 
 import UIKit
+import LocalAuthentication
 
 class LoginViewController: UIViewController {
-
+    
     @IBOutlet var numButtons: [UIButton]!
     @IBOutlet weak var faceIdButton: UIButton!
     @IBOutlet weak var backspaceButton: UIButton!
@@ -36,12 +37,12 @@ class LoginViewController: UIViewController {
         setupNumImages()
     }
     override func viewWillAppear(_ animated: Bool) {
-       super.viewWillAppear(animated)
+        super.viewWillAppear(animated)
         enteredPass = "Enter Password"
         passField.text = enteredPass
         
     }
-
+    
     @IBAction func enterNum(_ sender: UIButton) {
         if enteredPass == "Enter Password" {
             enteredPass = ""
@@ -52,7 +53,7 @@ class LoginViewController: UIViewController {
     }
     
     @IBAction func enterByFaceId(_ sender: Any) {
-        confirmPass()
+        authenticateFaceId()
     }
     
     @IBAction func deleteSymbol(_ sender: Any) {
@@ -94,12 +95,41 @@ class LoginViewController: UIViewController {
             alertController.dismiss(animated: true)
             self.confirmPass()
         }
-       
+        
     }
     
-    func confirmPass() {
+    private func confirmPass() {
         let destinationController = GalleryViewController()
         destinationController.modalPresentationStyle = .fullScreen
         self.present(destinationController, animated: false)
+    }
+    
+    private func authenticateFaceId() {
+        let context = LAContext()
+        var error: NSError? = nil
+        if context.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error) {
+            let reason = "It is really you?"
+            context.evaluatePolicy(.deviceOwnerAuthenticationWithBiometrics,
+                                   localizedReason: reason) {
+                [weak self] success, authenticationError in
+                DispatchQueue.main.async { [weak self] in
+                    
+                    guard success, error == nil else{
+                        let alert = UIAlertController(title: "404", message: error?.description, preferredStyle: .alert)
+                        let action = UIAlertAction(title: "OK", style: .cancel)
+                        alert.addAction(action)
+                        self?.present(alert, animated: false)
+                        return
+                    }
+                    //Authentication successful! Proceed to next app screen.
+                    self?.confirmPass()
+                }
+            }
+        } else {
+            //No biometrics available
+            let alert = UIAlertController(title: "Unavailable", message: "FaceID Auth not available", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Dismiss", style: .cancel, handler: nil))
+            present(alert, animated: true)
+        }
     }
 }
