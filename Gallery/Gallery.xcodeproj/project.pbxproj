@@ -21,6 +21,8 @@
 		EA5636B12A993B7400DDCD8B /* imageGallery.json in Resources */ = {isa = PBXBuildFile; fileRef = EA5636B02A993B7400DDCD8B /* imageGallery.json */; };
 		EA5636B62A99412400DDCD8B /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA5636B42A99412400DDCD8B /* LoginViewController.swift */; };
 		EA5636B72A99412400DDCD8B /* LoginViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = EA5636B52A99412400DDCD8B /* LoginViewController.xib */; };
+		EAA13ACF2A9B7E3C00F4CDA1 /* ImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAA13ACD2A9B7E3C00F4CDA1 /* ImageViewController.swift */; };
+		EAA13AD02A9B7E3C00F4CDA1 /* ImageViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = EAA13ACE2A9B7E3C00F4CDA1 /* ImageViewController.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -39,6 +41,8 @@
 		EA5636B02A993B7400DDCD8B /* imageGallery.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = imageGallery.json; sourceTree = "<group>"; };
 		EA5636B42A99412400DDCD8B /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		EA5636B52A99412400DDCD8B /* LoginViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LoginViewController.xib; sourceTree = "<group>"; };
+		EAA13ACD2A9B7E3C00F4CDA1 /* ImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageViewController.swift; sourceTree = "<group>"; };
+		EAA13ACE2A9B7E3C00F4CDA1 /* ImageViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ImageViewController.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -91,6 +95,7 @@
 				EA5636B52A99412400DDCD8B /* LoginViewController.xib */,
 				EA3C0B082A9A4D7C00822C9A /* GalleryViewController.xib */,
 				EA3C0B2C2A9AAF9400822C9A /* CollectionViewCell.xib */,
+				EAA13ACE2A9B7E3C00F4CDA1 /* ImageViewController.xib */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -111,6 +116,7 @@
 				EA5636B42A99412400DDCD8B /* LoginViewController.swift */,
 				EA3C0B072A9A4D7C00822C9A /* GalleryViewController.swift */,
 				EA3C0B2B2A9AAF9400822C9A /* CollectionViewCell.swift */,
+				EAA13ACD2A9B7E3C00F4CDA1 /* ImageViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -188,6 +194,7 @@
 			files = (
 				EA5636B72A99412400DDCD8B /* LoginViewController.xib in Resources */,
 				EA3C0B2E2A9AAF9400822C9A /* CollectionViewCell.xib in Resources */,
+				EAA13AD02A9B7E3C00F4CDA1 /* ImageViewController.xib in Resources */,
 				EA3C0B0A2A9A4D7C00822C9A /* GalleryViewController.xib in Resources */,
 				EA5636A42A99364000DDCD8B /* LaunchScreen.storyboard in Resources */,
 				EA5636A12A99364000DDCD8B /* Assets.xcassets in Resources */,
@@ -206,6 +213,7 @@
 				EA5636B62A99412400DDCD8B /* LoginViewController.swift in Sources */,
 				EA56369C2A99363E00DDCD8B /* SplashViewController.swift in Sources */,
 				EA3C0B2D2A9AAF9400822C9A /* CollectionViewCell.swift in Sources */,
+				EAA13ACF2A9B7E3C00F4CDA1 /* ImageViewController.swift in Sources */,
 				EA3C0B092A9A4D7C00822C9A /* GalleryViewController.swift in Sources */,
 				EA5636982A99363E00DDCD8B /* AppDelegate.swift in Sources */,
 				EA56369A2A99363E00DDCD8B /* SceneDelegate.swift in Sources */,

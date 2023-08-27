@@ -8,10 +8,13 @@
 import UIKit
 
 class GalleryViewController: UIViewController {
+    
 
     @IBOutlet weak var collectionView: UICollectionView!
+    
     var images = [UIImage]()
-    //    @IBOutlet weak var imageView: UIImageView!
+    var cellSpacing: CGFloat = 1
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         collectionView.delegate = self
@@ -72,21 +75,11 @@ extension GalleryViewController: UIImagePickerControllerDelegate & UINavigationC
         self.images.append(image)
         collectionView.reloadData()
         picker.dismiss(animated: true)
-        
-        
-//        var selectedImages = [UIImage]()
-//        for _ in 0..<info.count {
-//            guard let image = info[.originalImage] as? UIImage else { return }
-//            selectedImages.append(image)
-////        guard let image = info[.originalImage] as? UIImage else {
-////            return
-//        }
-//        self.imageView.image = selectedImages[0]
-//        picker.dismiss(animated: true)
     }
 }
 
 extension GalleryViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         1
     }
@@ -102,6 +95,31 @@ extension GalleryViewController: UICollectionViewDelegate, UICollectionViewDataS
         cell.imageCell.image = images[index]
         return cell
     }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        
+        let width = (collectionView.frame.width / 3.5)
+        return CGSize(width: width, height: width)
+        
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        cellSpacing
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        collectionView.deselectItem(at: indexPath, animated: true)
+        let index = indexPath.row
+        
+        guard let cell = collectionView.cellForItem(at: indexPath) as? CollectionViewCell else {  return }
+        
+        let destinationController = ImageViewController()
+        destinationController.picture = images[index]
+        destinationController.modalPresentationStyle = .fullScreen
+        self.present(destinationController, animated: false)
+        }
+        
+    
     
     
 }
