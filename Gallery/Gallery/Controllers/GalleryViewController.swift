@@ -6,13 +6,15 @@
 //
 
 import UIKit
+import PhotosUI
 
 class GalleryViewController: UIViewController {
-    
 
     @IBOutlet weak var collectionView: UICollectionView!
     
     var images = [UIImage]()
+    var savedImage = UIImage()
+    
     var cellSpacing: CGFloat = 1
     
     override func viewDidLoad() {
@@ -22,8 +24,10 @@ class GalleryViewController: UIViewController {
         
         let photoNib = UINib(nibName: "CollectionViewCell", bundle: Bundle.main)
         collectionView.register(photoNib, forCellWithReuseIdentifier: "photoCollectionViewCell")
-
+    
     }
+    
+
 
     @IBAction func exit(_ sender: Any) {
         dismiss(animated: false)
@@ -44,12 +48,20 @@ class GalleryViewController: UIViewController {
             self?.present(pickerController, animated: true)
         }
         let galleryAction = UIAlertAction(title: "Photo Library", style: .default) { [weak self] _ in
-            let pickerController = UIImagePickerController()
-            pickerController.delegate = self
-            pickerController.allowsEditing = false
-            pickerController.mediaTypes = ["public.image"]
-            pickerController.sourceType = .photoLibrary
-            self?.present(pickerController, animated: true)
+//            let pickerController = UIImagePickerController()
+//            pickerController.delegate = self
+//            pickerController.allowsEditing = false
+//            pickerController.mediaTypes = ["public.image"]
+//            pickerController.sourceType = .photoLibrary
+//            self?.present(pickerController, animated: true)
+            
+            var config = PHPickerConfiguration()
+            config.selectionLimit = 50
+            
+            let phPickerVC = PHPickerViewController(configuration: config)
+            phPickerVC.delegate = self
+            self?.present(phPickerVC, animated: true)
+            
         }
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
         
@@ -72,8 +84,8 @@ extension GalleryViewController: UIImagePickerControllerDelegate & UINavigationC
         guard let image = info[.originalImage] as? UIImage else {
             return
         }
-        self.images.append(image)
-        collectionView.reloadData()
+//        self.images.append(image)
+//        collectionView.reloadData()
         picker.dismiss(animated: true)
     }
 }
@@ -124,3 +136,20 @@ extension GalleryViewController: UICollectionViewDelegate, UICollectionViewDataS
     
 }
 
+extension GalleryViewController: PHPickerViewControllerDelegate {
+    func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
+        dismiss(animated: true)
+        for result in results {
+            result.itemProvider.loadObject(ofClass: UIImage.self) { object, error in
+                if let image = object as? UIImage {
+                    self.images.append(image)
+                    
+                }
+                
+                DispatchQueue.main.async {
+                    self.collectionView.reloadData()
+                }
+            }
+        }
+    }
+}
