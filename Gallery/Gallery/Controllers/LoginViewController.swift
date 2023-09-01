@@ -30,7 +30,7 @@ class LoginViewController: UIViewController {
             }
         }
     }
-    var requiredPass = "1432"
+    var requiredPass = "1111"
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -57,7 +57,7 @@ class LoginViewController: UIViewController {
     }
     
     @IBAction func deleteSymbol(_ sender: Any) {
-        guard enteredPass.count > 0 else { return }
+        guard (enteredPass.count > 0) && (enteredPass != "Enter Password") else { return }
         enteredPass.removeLast()
     }
     
@@ -82,7 +82,8 @@ class LoginViewController: UIViewController {
     private func wrongPassAlert() {
         let alertController = UIAlertController(title: "Sorry", message: "Wrong password", preferredStyle: .alert)
         let tryAgainAction = UIAlertAction(title: "Try again", style: .cancel) { action in
-            self.enteredPass = "Enter Password"
+            self.enteredPass = ""
+            self.passField.text = "Enter Password"
         }
         alertController.addAction(tryAgainAction)
         present(alertController, animated: true)

@@ -24,6 +24,8 @@ class GalleryViewController: UIViewController {
         
         let photoNib = UINib(nibName: "CollectionViewCell", bundle: Bundle.main)
         collectionView.register(photoNib, forCellWithReuseIdentifier: "photoCollectionViewCell")
+        
+        loadImage()
     
     }
     
@@ -35,6 +37,54 @@ class GalleryViewController: UIViewController {
     
     @IBAction func addPhoto(_ sender: Any) {
         showPickingAlert()
+    }
+    
+    func saveImage(_ image: UIImage) {
+        guard let saveDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first, let imageData = image.pngData() else { return }
+        
+        let fileName = UUID().uuidString
+        
+        let fileURL = URL(fileURLWithPath: fileName, relativeTo: saveDirectory).appendingPathExtension("png")
+        
+        try? imageData.write(to: fileURL) // try imageData write(save) to fileURL
+        
+        URLManager.addImageName(fileName)
+        
+        self.images.append(image)
+        print("File saved: \(fileURL.absoluteURL)")
+        DispatchQueue.main.async {
+            self.collectionView.reloadData()
+        }
+        
+
+    }
+    
+    func loadImage() {
+        if URLManager.getImagesNames().count > 0 {
+            for index in 0..<URLManager.getImagesNames().count {
+                guard let saveDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return }
+                let fileName = URLManager.getImagesNames()[index]
+                
+                let fileURL = URL(fileURLWithPath: fileName, relativeTo: saveDirectory).appendingPathExtension("png")
+                
+                // Get the saved data and we should get a picture
+                guard let savedData = try? Data(contentsOf: fileURL), let image = UIImage(data: savedData) else { return }
+                self.images.append(image)
+                
+            }
+        }
+
+//        try? FileManager.default.removeItem(at: fileURL)
+        
+        DispatchQueue.main.async {
+            self.collectionView.reloadData()
+        }
+
+    }
+    
+    func clearImages() {
+        URLManager.deleteAll()
+        images = []
     }
     
     private func showPickingAlert() {
@@ -142,13 +192,13 @@ extension GalleryViewController: PHPickerViewControllerDelegate {
         for result in results {
             result.itemProvider.loadObject(ofClass: UIImage.self) { object, error in
                 if let image = object as? UIImage {
-                    self.images.append(image)
+                    self.saveImage(image)
                     
                 }
                 
-                DispatchQueue.main.async {
-                    self.collectionView.reloadData()
-                }
+//                DispatchQueue.main.async {
+//                    self.collectionView.reloadData()
+//                }
             }
         }
     }
