@@ -81,11 +81,13 @@ class GalleryViewController: UIViewController {
         }
 
     }
-    
-    func clearImages() {
+    @IBAction func clearImages(_ sender: Any) {
         URLManager.deleteAll()
         images = []
+        collectionView.reloadData()
     }
+    
+
     
     private func showPickingAlert() {
         let alert = UIAlertController(title: "Add photo", message: "Choose app for adding photo", preferredStyle: .actionSheet)
