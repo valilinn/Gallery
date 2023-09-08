@@ -7,6 +7,8 @@
 
 import UIKit
 import PhotosUI
+import UniformTypeIdentifiers
+import MobileCoreServices
 
 class GalleryViewController: UIViewController {
 
@@ -51,7 +53,6 @@ class GalleryViewController: UIViewController {
         URLManager.addImageName(fileName)
         
         self.images.append(image)
-        print("File saved: \(fileURL.absoluteURL)")
         DispatchQueue.main.async {
             self.collectionView.reloadData()
         }
@@ -115,10 +116,18 @@ class GalleryViewController: UIViewController {
             self?.present(phPickerVC, animated: true)
             
         }
+        
+        let filesAction = UIAlertAction(title: "Files", style: .default) { [weak self] _ in
+            let pickerController = UIDocumentPickerViewController(forOpeningContentTypes: [UTType.image], asCopy: false)
+            pickerController.delegate = self
+            self?.present(pickerController, animated: true)
+        }
+        
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
         
         alert.addAction(cameraAction)
         alert.addAction(galleryAction)
+        alert.addAction(filesAction)
         alert.addAction(cancelAction)
         
         self.present(alert, animated: true)
@@ -202,6 +211,15 @@ extension GalleryViewController: PHPickerViewControllerDelegate {
 //                    self.collectionView.reloadData()
 //                }
             }
+        }
+    }
+}
+
+extension GalleryViewController: UIDocumentPickerDelegate {
+    func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
+        for url in urls {
+            guard let saveData = try? Data(contentsOf: url.absoluteURL), let image = UIImage(data: saveData) else { continue }
+            saveImage(image)
         }
     }
 }
