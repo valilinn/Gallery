@@ -11,7 +11,7 @@ import UniformTypeIdentifiers
 import MobileCoreServices
 
 class GalleryViewController: UIViewController {
-
+    
     @IBOutlet weak var collectionView: UICollectionView!
     
     var images = [UIImage]()
@@ -28,17 +28,23 @@ class GalleryViewController: UIViewController {
         collectionView.register(photoNib, forCellWithReuseIdentifier: "photoCollectionViewCell")
         
         loadImage()
-    
+        
     }
     
-
-
+    
+    
     @IBAction func exit(_ sender: Any) {
         dismiss(animated: false)
     }
     
     @IBAction func addPhoto(_ sender: Any) {
         showPickingAlert()
+    }
+    
+    func updateCollection() {
+        DispatchQueue.main.async { [weak self] in
+            self?.collectionView.reloadData()
+        }
     }
     
     func saveImage(_ image: UIImage) {
@@ -53,11 +59,9 @@ class GalleryViewController: UIViewController {
         URLManager.addImageName(fileName)
         
         self.images.append(image)
-        DispatchQueue.main.async {
-            self.collectionView.reloadData()
-        }
+        updateCollection()
         
-
+        
     }
     
     func loadImage() {
@@ -74,21 +78,19 @@ class GalleryViewController: UIViewController {
                 
             }
         }
-
-//        try? FileManager.default.removeItem(at: fileURL)
         
-        DispatchQueue.main.async {
-            self.collectionView.reloadData()
-        }
-
+        //        try? FileManager.default.removeItem(at: fileURL)
+        
+        updateCollection()
+        
     }
     @IBAction func clearImages(_ sender: Any) {
         URLManager.deleteAll()
         images = []
-        collectionView.reloadData()
+        updateCollection()
     }
     
-
+    
     
     private func showPickingAlert() {
         let alert = UIAlertController(title: "Add photo", message: "Choose app for adding photo", preferredStyle: .actionSheet)
@@ -101,12 +103,12 @@ class GalleryViewController: UIViewController {
             self?.present(pickerController, animated: true)
         }
         let galleryAction = UIAlertAction(title: "Photo Library", style: .default) { [weak self] _ in
-//            let pickerController = UIImagePickerController()
-//            pickerController.delegate = self
-//            pickerController.allowsEditing = false
-//            pickerController.mediaTypes = ["public.image"]
-//            pickerController.sourceType = .photoLibrary
-//            self?.present(pickerController, animated: true)
+            //            let pickerController = UIImagePickerController()
+            //            pickerController.delegate = self
+            //            pickerController.allowsEditing = false
+            //            pickerController.mediaTypes = ["public.image"]
+            //            pickerController.sourceType = .photoLibrary
+            //            self?.present(pickerController, animated: true)
             
             var config = PHPickerConfiguration()
             config.selectionLimit = 50
@@ -123,14 +125,60 @@ class GalleryViewController: UIViewController {
             self?.present(pickerController, animated: true)
         }
         
+        let urlImageAction = UIAlertAction(title: "Image form URL", style: .default) { [weak self] _ in
+            var placeholder = "https://..."
+            self?.presentAlert(
+                title: "Image URL",
+                message: "paste here:",
+                placeholder: placeholder
+            ) { [weak self] input in
+                guard input.count > 0 else { return }
+                self?.addPhotoByUrl(URL(string: input)!)
+            }
+        }
+        
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
         
         alert.addAction(cameraAction)
         alert.addAction(galleryAction)
         alert.addAction(filesAction)
+        alert.addAction(urlImageAction)
         alert.addAction(cancelAction)
         
         self.present(alert, animated: true)
+    }
+    
+    private func presentAlert(
+        title: String,
+        message: String,
+        placeholder: String = "",
+        handler: ((String) -> ())? = nil
+    ) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+            
+            alert.addTextField { textfield in
+                textfield.placeholder = placeholder
+            }
+            
+            let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
+            let okAction = UIAlertAction(title: "OK", style: .default) { _ in
+                guard let text = alert.textFields?.first?.text, text.count > 0 else { return }
+                handler?(text)
+            }
+            alert.addAction(cancelAction)
+            alert.addAction(okAction)
+            
+            present(alert, animated: true)
+    }
+    
+    func addPhotoByUrl(_ url: URL) {
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            if let data = try? Data(contentsOf: url) {
+                let image = UIImage(data: data)
+                    self?.saveImage(image!)
+                
+            }
+        }
     }
     
 }
@@ -141,12 +189,12 @@ extension GalleryViewController: UIImagePickerControllerDelegate & UINavigationC
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-       
+        
         guard let image = info[.originalImage] as? UIImage else {
             return
         }
-//        self.images.append(image)
-//        collectionView.reloadData()
+        //        self.images.append(image)
+        //        collectionView.reloadData()
         picker.dismiss(animated: true)
     }
 }
@@ -190,8 +238,8 @@ extension GalleryViewController: UICollectionViewDelegate, UICollectionViewDataS
         destinationController.picture = images[index]
         destinationController.modalPresentationStyle = .fullScreen
         self.present(destinationController, animated: false)
-        }
-        
+    }
+    
     
     
     
@@ -200,16 +248,18 @@ extension GalleryViewController: UICollectionViewDelegate, UICollectionViewDataS
 extension GalleryViewController: PHPickerViewControllerDelegate {
     func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
         dismiss(animated: true)
-        for result in results {
-            result.itemProvider.loadObject(ofClass: UIImage.self) { object, error in
-                if let image = object as? UIImage {
-                    self.saveImage(image)
-                    
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            for result in results {
+                result.itemProvider.loadObject(ofClass: UIImage.self) { object, error in
+                    if let image = object as? UIImage {
+                            self?.saveImage(image)
+                        
+                    }
                 }
                 
-//                DispatchQueue.main.async {
-//                    self.collectionView.reloadData()
-//                }
+                //                DispatchQueue.main.async {
+                //                    self.collectionView.reloadData()
+                //                }
             }
         }
     }
@@ -217,9 +267,12 @@ extension GalleryViewController: PHPickerViewControllerDelegate {
 
 extension GalleryViewController: UIDocumentPickerDelegate {
     func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
-        for url in urls {
-            guard let saveData = try? Data(contentsOf: url.absoluteURL), let image = UIImage(data: saveData) else { continue }
-            saveImage(image)
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            for url in urls {
+                guard let saveData = try? Data(contentsOf: url.absoluteURL), let image = UIImage(data: saveData) else { continue }
+                    self?.saveImage(image)
+                
+            }
         }
     }
 }
