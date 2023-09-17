@@ -26,8 +26,10 @@ class GalleryViewController: UIViewController {
         
         let photoNib = UINib(nibName: "CollectionViewCell", bundle: Bundle.main)
         collectionView.register(photoNib, forCellWithReuseIdentifier: "photoCollectionViewCell")
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            self?.loadImage()
+        }
         
-        loadImage()
         
     }
     
@@ -74,14 +76,15 @@ class GalleryViewController: UIViewController {
                 
                 // Get the saved data and we should get a picture
                 guard let savedData = try? Data(contentsOf: fileURL), let image = UIImage(data: savedData) else { return }
-                self.images.append(image)
-                
+                DispatchQueue.main.async { [weak self] in
+                    self?.images.append(image)
+                    self?.collectionView.reloadData()
+                }
             }
         }
         
         //        try? FileManager.default.removeItem(at: fileURL)
-        
-        updateCollection()
+  
         
     }
     @IBAction func clearImages(_ sender: Any) {
@@ -126,7 +129,7 @@ class GalleryViewController: UIViewController {
         }
         
         let urlImageAction = UIAlertAction(title: "Image form URL", style: .default) { [weak self] _ in
-            var placeholder = "https://..."
+            let placeholder = "https://..."
             self?.presentAlert(
                 title: "Image URL",
                 message: "paste here:",
